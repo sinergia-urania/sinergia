@@ -1,0 +1,14 @@
+@keyframes tarot-scroll {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: -1000px;
+  }
+}
+
+.tarot-voznja {
+  animation: tarot-scroll 10s linear infinite;
+  background-size: auto 150%;
+  background-repeat: repeat-x;
+}
