@@ -11,29 +11,24 @@ const IzborKarataModal = () => {
   );
   const [selectedCards, setSelectedCards] = useState([]);
   const [angleOffset, setAngleOffset] = useState(0);
-  const [dimensions, setDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const startX = useRef(null);
 
   useEffect(() => {
     const updateDimensions = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+      const width = window.innerWidth || document.documentElement.clientWidth || 360;
+      const height = window.innerHeight || document.documentElement.clientHeight || 640;
+      setDimensions({ width, height });
     };
 
-    window.addEventListener("resize", updateDimensions);
     updateDimensions();
-
+    window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   const centerX = dimensions.width / 2;
-  const centerY = dimensions.height + radius - 280; // podignut centar
+  const centerY = dimensions.height + radius - 280;
 
   const handleCardClick = (cardIndex) => {
     if (selectedCards.length >= 3) return;
@@ -69,12 +64,11 @@ const IzborKarataModal = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-between p-4">
-      {/* Placeholderi */}
       <div className="flex justify-center gap-4 mt-4">
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="w-20 h-32 border border-yellow-500 bg-gray-900 rounded flex items-center justify-center"
+            className="w-[72px] h-[115px] border border-yellow-500 bg-gray-900 rounded flex items-center justify-center"
           >
             {selectedCards[i] !== undefined && (
               <img
@@ -87,7 +81,6 @@ const IzborKarataModal = () => {
         ))}
       </div>
 
-      {/* Krug karata */}
       <div
         className="relative mt-10 mb-6 w-full h-[400px]"
         onMouseDown={handleTouchStart}
@@ -95,6 +88,20 @@ const IzborKarataModal = () => {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* SVG strelica levo */}
+        <img
+          src="/icons/arrow-left.svg"
+          alt="left-arrow"
+          className="absolute left-[10%] bottom-[80px] w-10 h-10 opacity-80"
+        />
+
+        {/* SVG strelica desno */}
+        <img
+          src="/icons/arrow-right.svg"
+          alt="right-arrow"
+          className="absolute right-[10%] bottom-[80px] w-10 h-10 opacity-80"
+        />
+
         {cards.map((card, i) => {
           if (!card.visible) return null;
 
@@ -127,7 +134,6 @@ const IzborKarataModal = () => {
         })}
       </div>
 
-      {/* Dugme - sada uvek vidljivo */}
       {selectedCards.length === 3 && (
         <button
           onClick={handleGoToAnswer}
