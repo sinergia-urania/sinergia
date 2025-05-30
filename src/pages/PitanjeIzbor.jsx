@@ -1,13 +1,15 @@
-import React from "react";
-import TarotVoz from "../components/TarotVoz";
-import TarotHeader from "./TarotHeader"; // ispravljeno u ./ jer je u pages
+import React, { useState } from "react";
+import TarotHeader from "./TarotHeader";
+import IzborKarataModal from "../components/IzborKarataModal";
 
 const PitanjeIzbor = () => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
       <TarotHeader />
 
-      <div className="flex flex-1 flex-col px-4 pt-2 pb-32 gap-4">
+      <div className="flex flex-1 flex-col px-4 pt-2 gap-4">
         {/* Gornji deo: predefinisana pitanja i placeholderi */}
         <div className="flex justify-between">
           {/* Levo: kategorije pitanja */}
@@ -43,12 +45,20 @@ const PitanjeIzbor = () => {
             className="w-full p-2 rounded bg-gray-900 border border-gray-700 text-white"
           />
         </div>
+
+        {/* Dugme za otvaranje modala */}
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-6 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-400 shadow-lg"
+          >
+            Izaberi kartu
+          </button>
+        </div>
       </div>
 
-      {/* Tarot voz pri dnu */}
-      <div className="fixed bottom-0 w-full h-14 overflow-hidden z-30">
-        <div className="tarot-voznja h-full w-[200%] bg-repeat-x bg-[url('/sprites/tarot_row_12_cards.png')]"></div>
-      </div>
+      {/* Modal za izbor karata */}
+      {showModal && <IzborKarataModal onClose={() => setShowModal(false)} />}
     </div>
   );
 };
