@@ -1,6 +1,6 @@
 // TarotArchive.jsx
 import React from 'react';
-import TarotHeader from './TarotHeader';
+import TarotHeader from '../components/TarotHeader';
 
 const TarotArchive = () => {
   return (

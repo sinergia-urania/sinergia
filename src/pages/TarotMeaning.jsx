@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TarotHeader from './TarotHeader';
+import TarotHeader from '../components/TarotHeader';
 import VelikaArkanaList from './VelikaArkanaList';
 import CardGroupList from './CardGroupList';
 

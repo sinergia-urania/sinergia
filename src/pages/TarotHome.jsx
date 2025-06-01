@@ -1,58 +1,70 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import TarotHeader from './TarotHeader';
-import TarotMembershipTable from './TarotMembershipTable';
+import { JEDNA_KARTA } from '../data/layoutTemplates';
+import TarotHeader from '../components/TarotHeader';
 
 const TarotHome = () => {
-  const [showTable, setShowTable] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <div className="w-full h-full flex flex-col items-center">
-      {/* Tarot zaglavlje */}
-      <div className="w-full z-10">
-        <TarotHeader />
-      </div>
+    <div className="flex flex-col min-h-screen bg-cover bg-center bg-no-repeat text-white"
+         style={{ backgroundImage: "url('/images/background-space.jpg')" }}>
+      <TarotHeader />
 
-      {/* Glavni sadržaj: dugmići */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-20 text-white px-4">
-        <button
-          onClick={() => navigate('/tarot/otvaranja')}
-          className="flex flex-col items-center transition duration-200"
-        >
-          <img src="/icons/history.png" alt="Sva otvaranja" className="w-[74px] h-[74px] mb-2" />
-          <span className="font-medium text-center">Sva otvaranja</span>
-        </button>
-        <button className="flex flex-col items-center transition duration-200">
-          <img src="/icons/daily.png" alt="Karta dana" className="w-16 h-16 mb-2" />
-          <span className="font-medium text-center">Karta dana</span>
-        </button>
-        <button
-          onClick={() => navigate('/tarot/znacenje')}
-          className="flex flex-col items-center transition duration-200"
-        >
-          <img src="/icons/meaning.png" alt="Značenje karata" className="w-16 h-16 mb-2" />
-          <span className="font-medium text-center">Značenje karata</span>
-        </button>
-      </div>
+      <div className="flex flex-col items-center justify-center flex-1 p-4">
+        <h1 className="text-2xl font-semibold mb-6">Tarot početna</h1>
 
-      {/* Dugme za prikaz tabele */}
-      <div className="mt-10">
-        <button
-          onClick={() => setShowTable(!showTable)}
-          className="flex flex-col items-center transition duration-200 text-white"
-        >
-          <img src="/icons/access.png" alt="" className="w-16 h-16 mb-2" />
-          <span className="font-medium text-center">Pristup aplikaciji</span>
-        </button>
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {/* Sva otvaranja */}
+          <button
+            onClick={() => navigate('/tarot/otvaranja')}
+            className="flex flex-col items-center transition duration-200"
+          >
+            <img src="/icons/history.png" alt="Sva otvaranja" className="w-[90px] h-[100px] mb-2" />
+            <span className="font-medium text-center">Sva otvaranja</span>
+          </button>
 
-      {/* Tabela pristupa */}
-      {showTable && (
-        <div className="w-full bg-black/70 mt-6 rounded p-2 max-w-3xl text-xs text-white">
-          <TarotMembershipTable />
+          {/* Karta dana */}
+          <button
+            onClick={() =>
+              navigate('/tarot/izbor-karti', { state: { layoutTemplate: JEDNA_KARTA, tip: 'karta-dana' } })
+            }
+            className="flex flex-col items-center transition duration-200"
+          >
+            <img src="/icons/daily.png" alt="Karta dana" className="w-16 h-17 mb-2" />
+            <span className="font-medium text-center">Karta dana</span>
+          </button>
+
+          {/* Da / Ne */}
+          <button
+            onClick={() =>
+              navigate('/tarot/izbor-karti', { state: { layoutTemplate: JEDNA_KARTA, tip: 'da-ne' } })
+            }
+            className="flex flex-col items-center transition duration-200"
+          >
+            <img src="/icons/yes.no.png" alt="Yes/No" className="w-17 h-14 mb-2" />
+            <span className="font-medium text-center">Da / Ne</span>
+          </button>
+
+          {/* Značenje karata */}
+          <button
+            onClick={() => navigate('/tarot/znacenje')}
+            className="flex flex-col items-center transition duration-200"
+          >
+            <img src="/icons/meaning.png" alt="Značenje karata" className="w-13 h-16 mb-2" />
+            <span className="font-medium text-center">Značenje karata</span>
+          </button>
+
+          {/* Pristup aplikaciji */}
+          <button
+            onClick={() => navigate('/tarot/pristup')}
+            className="flex flex-col items-center transition duration-200"
+          >
+            <img src="/icons/access.png" alt="Pristup aplikaciji" className="w-16 h-16 mb-2" />
+            <span className="font-medium text-center">Pristup aplikaciji</span>
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 };

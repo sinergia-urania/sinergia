@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const totalCards = 72;
 const radius = 600;
 
-const IzborKarataModal = () => {
+const IzborKarataModal = ({ layoutTemplate = [], pitanje = "", tip = "", onClose = () => {} }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const numPlaceholders = layoutTemplate.length;
+
   const [cards, setCards] = useState(
     Array.from({ length: totalCards }, (_, i) => ({ id: i, visible: true }))
   );
@@ -31,7 +34,7 @@ const IzborKarataModal = () => {
   const centerY = dimensions.height + radius - 280;
 
   const handleCardClick = (cardIndex) => {
-    if (selectedCards.length >= 3) return;
+    if (selectedCards.length >= numPlaceholders) return;
 
     const card = cards[cardIndex];
     if (!card.visible) return;
@@ -43,7 +46,60 @@ const IzborKarataModal = () => {
   };
 
   const handleGoToAnswer = () => {
-    navigate("/tarot/odgovor");
+    if (tip === "da-ne") {
+      const izabranaKartaId = selectedCards[0];
+      const okrenuta = Math.random() > 0.5 ? "uspravno" : "obrnuto";
+      navigate("/tarot/da-ne-odgovor", {
+        state: {
+          karta: {
+            id: izabranaKartaId,
+            image: "/cards/master-card.png",
+            okrenuta,
+          },
+          odgovor: okrenuta === "uspravno" ? "DA" : "NE",
+        },
+      });
+      return;
+    }
+
+    if (tip === "karta-dana") {
+      const izabranaKartaId = selectedCards[0];
+      const naziv = "Nasumična karta";
+      const okrenuta = Math.random() > 0.5 ? "uspravno" : "obrnuto";
+      const slika = "/cards/master-card.png";
+      const znacenje = "Ovo je značenje tvoje karte dana.";
+      navigate("/tarot/karta-dana-odgovor", {
+        state: {
+          karta: {
+            id: izabranaKartaId,
+            naziv,
+            slika,
+            okrenuta,
+            znacenje,
+          },
+        },
+      });
+      return;
+    }
+
+    if (
+      ["ljubavno", "astrološko", "keltski", "drvo", "tri", "pet", "dve"].includes(tip)
+    ) {
+      navigate("/tarot/odgovor-ai", {
+        state: {
+          karte: selectedCards.map((kartaId) => ({
+            id: kartaId,
+            image: "/cards/master-card.png",
+          })),
+          pitanje,
+          tip,
+          korisnikTip: "profi",
+        },
+      });
+      return;
+    }
+
+    console.warn("Nepoznat tip otvaranja. Navigacija nije moguća.");
   };
 
   const handleTouchStart = (e) => {
@@ -65,10 +121,10 @@ const IzborKarataModal = () => {
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-between p-4">
       <div className="flex justify-center gap-4 mt-4">
-        {[...Array(3)].map((_, i) => (
+        {layoutTemplate.map((_, i) => (
           <div
             key={i}
-            className="w-[72px] h-[115px] border border-yellow-500 bg-gray-900 rounded flex items-center justify-center"
+            className="w-[60px] h-[97px] border border-yellow-500 bg-gray-900 rounded flex items-center justify-center"
           >
             {selectedCards[i] !== undefined && (
               <img
@@ -88,20 +144,6 @@ const IzborKarataModal = () => {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* SVG strelica levo */}
-        <img
-          src="/icons/arrow-left.svg"
-          alt="left-arrow"
-          className="absolute left-[10%] bottom-[80px] w-10 h-10 opacity-80"
-        />
-
-        {/* SVG strelica desno */}
-        <img
-          src="/icons/arrow-right.svg"
-          alt="right-arrow"
-          className="absolute right-[10%] bottom-[80px] w-10 h-10 opacity-80"
-        />
-
         {cards.map((card, i) => {
           if (!card.visible) return null;
 
@@ -134,7 +176,7 @@ const IzborKarataModal = () => {
         })}
       </div>
 
-      {selectedCards.length === 3 && (
+      {selectedCards.length === numPlaceholders && (
         <button
           onClick={handleGoToAnswer}
           className="mt-20 mb-4 px-6 py-2 bg-yellow-600 text-black rounded shadow-lg hover:bg-yellow-500"

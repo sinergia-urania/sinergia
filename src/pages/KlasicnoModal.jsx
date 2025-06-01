@@ -1,13 +1,33 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  DVE_KARTE,
+  TRI_KARTE,
+  PET_KARATA,
+} from '../data/layoutTemplates';
 
-const KlasicnoModal = ({ isOpen, onClose }) => {
+const KlasicnoModal = ({ onClose }) => {
   const navigate = useNavigate();
 
-  if (!isOpen) return null;
+  const handleSelect = (key) => {
+    if (key === '2') {
+      navigate("/tarot/izbor", {
+        state: { layoutTemplate: DVE_KARTE, tip: "ljubavno" }
+      });
+    } else if (key === '3') {
+      navigate("/tarot/izbor", {
+        state: { layoutTemplate: TRI_KARTE, tip: "tri" }
+      });
+    } else if (key === '5') {
+      navigate("/tarot/izbor", {
+        state: { layoutTemplate: PET_KARATA, tip: "pet" }
+      });
+    }
+  };
 
   const options = [
-    { key: '1', label: 'Jedna karta', icon: '/icons/one-card.png' },
+    { key: '2', label: 'Dve karte (Ja/On)', icon: '/icons/love.png' },
     { key: '3', label: 'Tri karte', icon: '/icons/history.png' },
     { key: '5', label: 'Pet karata', icon: '/icons/five-cards.png' },
   ];
@@ -26,7 +46,7 @@ const KlasicnoModal = ({ isOpen, onClose }) => {
           {options.map((opt) => (
             <div
               key={opt.key}
-              onClick={() => navigate(`/tarot/otvaranja/klasicno/${opt.key}`)}
+              onClick={() => handleSelect(opt.key)}
               className="flex flex-col items-center cursor-pointer hover:opacity-80 transition"
             >
               <img src={opt.icon} alt={opt.label} className="w-16 h-16 mb-1 object-contain" />

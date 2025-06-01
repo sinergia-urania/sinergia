@@ -1,53 +1,67 @@
-import React, { useState } from 'react';
-import TarotHeader from './TarotHeader';
-import KlasicnoModal from './KlasicnoModal';
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import TarotHeader from "../components/TarotHeader";
+import KlasicnoModal from "./KlasicnoModal";
 
 const TarotOtvaranja = () => {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelect = (key) => {
     if (key === 'klasicno') {
       setShowModal(true);
+    } else if (key === 'keltski') {
+      navigate('/tarot/izbor', {
+        state: {
+          layoutTemplate: 'keltski',
+          tip: 'keltski'
+        }
+      });
+    } else if (key === 'astrološko') {
+      navigate('/tarot/izbor', {
+        state: {
+          layoutTemplate: 'astrološko',
+          tip: 'astrološko'
+        }
+      });
+    } else if (key === 'kabalisticko') {
+      navigate('/tarot/izbor', {
+        state: {
+          layoutTemplate: 'drvo',
+          tip: 'drvo'
+        }
+      });
     } else {
-      // Možeš dodati navigaciju i za ostale kasnije
-      console.log("Otvaranje:", key);
+      console.log("Nepoznata selekcija:", key);
     }
   };
 
-  const options = [
-    { key: 'klasicno', label: 'Klasično otvaranje', icon: '/icons/otvaranje-klasicno.png' },
-    { key: 'keltski', label: 'Keltski krst', icon: '/icons/otvaranje-keltski.png' },
-    { key: 'astrološko', label: 'Astrološko otvaranje', icon: '/icons/otvaranje-astro.png' },
-    { key: 'kabalisticko', label: 'Kabalističko otvaranje', icon: '/icons/otvaranje-drvo.png' },
-  ];
-
   return (
-    <div className="min-h-screen w-full text-white flex flex-col items-center"
-         style={{
-           backgroundImage: "url('/background-space.png')",
-           backgroundSize: 'cover',
-           backgroundPosition: 'center',
-           backgroundRepeat: 'no-repeat',
-         }}
-    >
+    <div className="background-space text-white min-h-screen">
       <TarotHeader />
-
-      <h2 className="text-xl font-semibold mt-10 mb-6">Izaberite vrstu otvaranja</h2>
-
-      <div className="flex flex-col items-center space-y-6 mb-20">
-        {options.map((opt) => (
-          <div
-            key={opt.key}
-            onClick={() => handleSelect(opt.key)}
-            className="flex flex-col items-center cursor-pointer hover:opacity-80 transition"
-          >
-            <img src={opt.icon} alt={opt.label} className="w-24 h-24 mb-1 object-contain" />
-            <span className="text-xs text-center">{opt.label}</span>
-          </div>
-        ))}
+      <div className="flex flex-col items-center pt-8 gap-6">
+        <h2 className="text-2xl font-semibold text-center mb-4">Odaberite vrstu otvaranja</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <button onClick={() => handleSelect("klasicno")} className="bg-transparent p-4 rounded-lg hover:bg-gray-700 text-center border border-gray-700">
+            <img src="/icons/otvaranje-klasicno.png" alt="Klasično otvaranje" className="w-16 h-16 mx-auto mb-2" />
+            Klasično otvaranje
+          </button>
+          <button onClick={() => handleSelect("keltski")} className="bg-transparent p-4 rounded-lg hover:bg-gray-700 text-center border border-gray-700">
+            <img src="/icons/otvaranje-keltski.png" alt="Keltski krst" className="w-16 h-16 mx-auto mb-2" />
+            Keltski krst
+          </button>
+          <button onClick={() => handleSelect("astrološko")} className="bg-transparent p-4 rounded-lg hover:bg-gray-700 text-center border border-gray-700">
+            <img src="/icons/otvaranje-astro.png" alt="Astrološko otvaranje" className="w-16 h-16 mx-auto mb-2" />
+            Astrološko otvaranje
+          </button>
+          <button onClick={() => handleSelect("kabalisticko")} className="bg-transparent p-4 rounded-lg hover:bg-gray-700 text-center border border-gray-700">
+            <img src="/icons/otvaranje-drvo.png" alt="Kabalističko otvaranje" className="w-16 h-16 mx-auto mb-2" />
+            Kabalističko otvaranje
+          </button>
+        </div>
       </div>
-
-      <KlasicnoModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      {showModal && <KlasicnoModal onClose={() => setShowModal(false)} />}
     </div>
   );
 };
