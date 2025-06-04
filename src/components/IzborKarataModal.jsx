@@ -1,10 +1,9 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { shuffleAndSelect } from "../utils/generateRandomCards";
 import { allCardKeys } from "../utils/allCardKeys";
 
-const totalCards = 78; // START: Povećano sa 72 na 78
+const totalCards = 78;
 const radius = 600;
 
 const getCardNameById = (key) => key;
@@ -17,14 +16,14 @@ const IzborKarataModal = ({ layoutTemplate = [], pitanje = "", tip = "" }) => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [angleOffset, setAngleOffset] = useState(0);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [ukljuciObrnute, setUkljuciObrnute] = useState(false); // START: toggle za obrnute
   const startX = useRef(null);
+  const [animatedKey, setAnimatedKey] = useState(null);
 
-  // START: Promešaj karte na početku
   useEffect(() => {
     const shuffled = [...allCardKeys].sort(() => Math.random() - 0.5);
     setAvailableCards(shuffled.map(key => ({ key, removed: false })));
   }, []);
-  // END: Promešaj karte na početku
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -43,21 +42,24 @@ const IzborKarataModal = ({ layoutTemplate = [], pitanje = "", tip = "" }) => {
     const cardIndex = availableCards.findIndex(c => c.key === cardKey);
     if (cardIndex === -1 || availableCards[cardIndex].removed) return;
 
+    const audio = new Audio("/sounds/click-card.mp3");
+    audio.play();
+
+    setAnimatedKey(cardKey);
+    setTimeout(() => setAnimatedKey(null), 600);
+
+    const isReversed = ukljuciObrnute && Math.random() < 0.5;
+
     const newAvailable = [...availableCards];
     newAvailable[cardIndex].removed = true;
     setAvailableCards(newAvailable);
-    setSelectedCards([...selectedCards, cardKey]);
+    setSelectedCards([...selectedCards, { label: cardKey, reversed: isReversed }]);
   };
 
   const handleGoToAnswer = () => {
-    const karteSaLabelom = selectedCards.map((key) => ({
-      label: key,
-      image: `/cards/${key}.webp`
-    }));
-
     navigate("/tarot/odgovor-ai", {
       state: {
-        karte: karteSaLabelom,
+        karte: selectedCards,
         pitanje,
         tip,
         korisnikTip: "profi",
@@ -82,18 +84,33 @@ const IzborKarataModal = ({ layoutTemplate = [], pitanje = "", tip = "" }) => {
   };
 
   const centerX = dimensions.width / 2;
-  const centerY = dimensions.height + radius - 360; // START: Pomerena lepeza na gore
+  const centerY = 840;
 
   return (
     <div className="fixed inset-0 z-50 bg-black overflow-hidden">
       <div className="absolute top-4 right-4 text-white text-2xl cursor-pointer" onClick={handleBack}>×</div>
       <div className="flex flex-col items-center p-4 min-h-screen">
+        {/* START: Checkbox za obrnute karte */}
+        <label className="text-white mb-2 flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={ukljuciObrnute}
+            onChange={(e) => setUkljuciObrnute(e.target.checked)}
+          />
+          Uključi obrnute karte
+        </label>
+        {/* END: Checkbox za obrnute karte */}
+
         <div className="flex flex-col items-center justify-between flex-grow gap-4 w-full">
-          <div className="grid grid-cols-4 gap-2 place-items-center"> {/* START: 4 u red */}
+          <div className="grid grid-cols-4 gap-2 place-items-center">
             {layoutTemplate.map((_, i) => (
               <div key={i} className="w-[60px] h-[96px] sm:w-[72px] sm:h-[108px] border border-yellow-500 bg-gray-900 rounded flex items-center justify-center">
                 {selectedCards[i] !== undefined && (
-                  <img src={`/cards/${selectedCards[i]}.webp`} alt="selected" className="w-full h-full object-contain" />
+                  <img
+                    src={`/cards/${selectedCards[i].label}.webp`}
+                    alt="selected"
+                    className={`w-full h-full object-contain ${selectedCards[i].reversed ? 'rotate-180' : ''}`}
+                  />
                 )}
               </div>
             ))}
@@ -110,13 +127,14 @@ const IzborKarataModal = ({ layoutTemplate = [], pitanje = "", tip = "" }) => {
               const angleRad = (angleDeg * Math.PI) / 180;
               const x = centerX + radius * Math.cos(angleRad);
               const y = centerY + radius * Math.sin(angleRad);
+              const isAnimating = card.key === animatedKey;
               return (
                 <div key={card.key}
-                  className="w-20 h-32 absolute transition-all duration-300"
+                  className={`w-20 h-32 absolute transition-all duration-300 ${isAnimating ? 'animate-card' : ''}`}
                   style={{
                     left: `${x}px`,
                     top: `${y}px`,
-                    transform: `translate(-50%, -100%) rotate(${angleDeg + 90}deg)`,
+                    transform: `translate(-50%, -100%) rotate(${angleDeg + 90}deg)` ,
                     transformOrigin: "bottom center",
                     zIndex: i,
                     visibility: card.removed ? "hidden" : "visible"

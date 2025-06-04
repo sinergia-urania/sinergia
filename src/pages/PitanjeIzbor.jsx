@@ -1,49 +1,130 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import TarotHeader from '../components/TarotHeader';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import TarotHeader from "../components/TarotHeader";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 
-const teme = {
-  "Analiza ličnosti": [
-    "Koje su moje glavne unutrašnje snage?",
-    "Koji aspekt mog karaktera mi donosi prepreke?",
-    "Kako da postanem autentičniji?"
-  ],
-  "Ljubavni odnosi": [
-    "Kakva je priroda mog trenutnog odnosa?",
-    "Šta moj partner/partnerka oseća prema meni?",
-    "Da li je ova veza dugoročna?"
-  ],
-  "Porodična pitanja": [
-    "Kako mogu poboljšati porodične odnose?",
-    "Šta stoji iza konflikta u porodici?",
-    "Koja je poruka mog porodičnog nasleđa?"
-  ],
-  "Posao i novac": [
-    "Koji je sledeći korak u mojoj karijeri?",
-    "Kako da poboljšam finansijsku situaciju?",
-    "Da li je sada vreme za promenu posla?"
-  ],
-  "Duhovni razvoj": [
-    "Koja je moja trenutna duhovna lekcija?",
-    "Kako da produbim kontakt sa sobom?",
-    "Gde se nalazim na svom duhovnom putu?"
-  ],
-  "Karmički uticaji": [
-    "Koja je karmička pozadina moje situacije?",
-    "Koji obrasci se ponavljaju iz prošlih života?",
-    "Kako da razrešim karmički dug?"
-  ]
-};
+const oblasti = [
+  {
+    naziv: "Ljubav",
+    ikonica: "❤️",
+    pitanja: [
+      "Da li me voli?",
+      "Kakva je naša budućnost?",
+      "Da li ćemo se pomiriti?",
+      "Da li ću uskoro upoznati nekog posebnog?",
+      "Kako mogu poboljšati svoj ljubavni život?",
+      "Da li je moj partner iskren prema meni?",
+    ],
+  },
+  {
+    naziv: "Posao",
+    ikonica: "💼",
+    pitanja: [
+      "Da li ću dobiti posao koji želim?",
+      "Kakva me karijera čeka?",
+      "Da li je vreme za promenu posla?",
+      "Kako da napredujem na poslu?",
+      "Da li će moj trud biti prepoznat?",
+      "Kako da pronađem posao koji me ispunjava?",
+    ],
+  },
+  {
+    naziv: "Zdravlje",
+    ikonica: "🧘",
+    pitanja: [
+      "Da li me očekuje oporavak?",
+      "Na šta treba da obratim pažnju?",
+      "Kako da unapredim svoje zdravlje?",
+      "Da li je trenutni tretman pravi izbor?",
+      "Kako mogu poboljšati mentalno zdravlje?",
+      "Da li treba da tražim drugo mišljenje?",
+    ],
+  },
+  {
+    naziv: "Finansije",
+    ikonica: "💰",
+    pitanja: [
+      "Kako da poboljšam svoje finansije?",
+      "Da li je pametno ulaganje?",
+      "Da li ću imati stabilnost?",
+      "Kako da raspolažem novcem pametnije?",
+      "Da li ću otplatiti dugove?",
+      "Da li mi sledi dobitak?",
+    ],
+  },
+  {
+    naziv: "Duhovni razvoj",
+    ikonica: "🌀",
+    pitanja: [
+      "Koja je moja svrha?",
+      "Šta mi duša poručuje?",
+      "Na čemu treba da radim duhovno?",
+      "Koji je sledeći korak u mom razvoju?",
+      "Kako da pronađem unutrašnji mir?",
+      "Koja lekcija mi se ponavlja?",
+    ],
+  },
+  {
+    naziv: "Porodica i odnosi",
+    ikonica: "🏡",
+    pitanja: [
+      "Kako da poboljšam porodične odnose?",
+      "Da li će se situacija u porodici smiriti?",
+      "Kako da pomognem članu porodice?",
+      "Da li će se odnos sa [ime] popraviti?",
+      "Kako da budem podrška partneru/partnerki?",
+      "Da li nas očekuje mir u kući?",
+    ],
+  },
+];
 
-const PitanjeIzbor = () => {
+function Modal({ oblast, onSelect }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)} variant="outline" className="text-xl">
+        <span className="mr-2">{oblast.ikonica}</span>
+        {oblast.naziv}
+      </Button>
+      {open && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-zinc-900 text-white p-6 rounded max-w-md w-full">
+            <h2 className="text-xl font-semibold mb-4">{oblast.naziv} pitanja</h2>
+            <div className="grid gap-2">
+              {oblast.pitanja.map((p, idx) => (
+                <Button
+                  key={idx}
+                  variant="secondary"
+                  onClick={() => {
+                    setOpen(false);
+                    onSelect(p);
+                  }}
+                >
+                  {p}
+                </Button>
+              ))}
+            </div>
+            <div className="text-right mt-4">
+              <button
+                onClick={() => setOpen(false)}
+                className="text-sm text-gray-400 hover:text-white"
+              >
+                Zatvori
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function PitanjeIzbor() {
   const location = useLocation();
   const navigate = useNavigate();
   const { layoutTemplate, tip } = location.state || {};
   const [pitanje, setPitanje] = useState("");
-
-  const prikazaneTeme = tip === "ljubavno"
-    ? { "Ljubavni odnosi": teme["Ljubavni odnosi"] }
-    : teme;
 
   const handleNastavi = () => {
     if (!pitanje.trim()) return;
@@ -51,57 +132,36 @@ const PitanjeIzbor = () => {
       state: {
         layoutTemplate,
         pitanje,
-        tip
-      }
+        tip,
+      },
     });
   };
 
   return (
     <div className="min-h-screen background-space text-white pb-10">
       <TarotHeader />
-      <div className="max-w-xl mx-auto mt-6 px-4">
-        <h2 className="text-xl font-bold text-center mb-6">Postavite pitanje</h2>
+      <div className="max-w-2xl mx-auto px-4 mt-8">
+        <h2 className="text-2xl font-bold text-center mb-6">Izaberi oblast pitanja</h2>
 
-        <div className="space-y-6">
-          {Object.entries(prikazaneTeme).map(([kategorija, pitanja]) => (
-            <div key={kategorija}>
-              <h3 className="text-md font-semibold text-pink-400 mb-2">{kategorija}</h3>
-              <div className="grid grid-cols-1 gap-2">
-                {pitanja.map((p, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setPitanje(p)}
-                    className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-sm rounded text-white text-left"
-                  >
-                    {p}
-                  </button>
-                ))}
-              </div>
-            </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
+          {oblasti.map((oblast) => (
+            <Modal key={oblast.naziv} oblast={oblast} onSelect={(p) => { setPitanje(p); handleNastavi(); }} />
           ))}
         </div>
 
-        <div className="mt-8">
-          <textarea
-            className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none"
-            rows="4"
-            placeholder="Unesite svoje pitanje za AI tumača..."
+        <h2 className="text-lg mb-2">Ili unesi svoje pitanje</h2>
+        <div className="mb-10">
+          <Input
             value={pitanje}
             onChange={(e) => setPitanje(e.target.value)}
+            placeholder="Unesi pitanje"
+            className="w-full max-w-md mb-4"
           />
-        </div>
-
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={handleNastavi}
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-semibold"
-          >
-            Izbor karata
-          </button>
+          <div className="flex justify-center">
+            <Button onClick={handleNastavi}>Izbor karata</Button>
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default PitanjeIzbor;
+}
