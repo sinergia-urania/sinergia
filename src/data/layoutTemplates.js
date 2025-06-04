@@ -12,8 +12,8 @@ export const LJUBAVNO_OTVARANJE = {
   label: "Ljubavno otvaranje",
   brojKarata: 2,
   layout: [
-    { x: -1, y: 0 },
-    { x: 1, y: 0 },
+    { x: -1, y: 0 }, // Ja
+    { x: 1, y: 0 },  // On/Ona
   ],
 };
 
@@ -46,17 +46,17 @@ export const KELTSKI_KRST = {
   label: "Keltski krst",
   brojKarata: 10,
   layout: [
-    { x: 0, y: 0 },      // 1
-    { x: 0, y: 0 },      // 2 (preklapa 1)
-    { x: -2, y: 0 },     // 3 levo
-    { x: 0, y: 2 },      // 4 dole
-    { x: 0, y: -2 },     // 5 gore
-    { x: 2, y: 0 },      // 6 desno
-    { x: 4, y: 2 },      // 7
-    { x: 4, y: 1 },      // 8
-    { x: 4, y: 0 },      // 9
-    { x: 4, y: -1 },     // 10
-  ]
+  { x: 0, y: 0 },      // 1
+  { x: 0, y: 0 },      // 2
+  { x: -1.5, y: 0 },     // 3
+  { x: 0, y: 2 },     // 4 (manje dole)
+  { x: 0, y: -2 },    // 5 (manje gore)
+  { x: 1.5, y: 0 },      // 6
+  { x: 3, y: -2.5 },   // 7
+  { x: 3, y: -1 },   // 8
+  { x: 3, y: 0.5 },    // 9
+  { x: 3, y: 2 },    // 10
+]
 };
 
 export const ASTROLOSKO = {
@@ -64,7 +64,7 @@ export const ASTROLOSKO = {
   label: "Astrološko otvaranje (12 kuća)",
   brojKarata: 12,
   layout: Array.from({ length: 12 }, (_, i) => {
-    const angle = (i / 12) * 2 * Math.PI;
+    const angle = ((i + 6) / 12) * 2 * Math.PI;
     return {
       x: Math.cos(angle) * 3,
       y: Math.sin(angle) * 3,
@@ -89,6 +89,7 @@ export const KABALISTICKO = {
     { x: 0, y: 3 },
   ],
 };
+
 
 export const DVE_KARTE = {
   id: "dve",

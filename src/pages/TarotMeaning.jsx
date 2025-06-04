@@ -1,7 +1,9 @@
+
 import React, { useState } from 'react';
 import TarotHeader from '../components/TarotHeader';
 import VelikaArkanaList from './VelikaArkanaList';
 import CardGroupList from './CardGroupList';
+import { getCardImagePath } from '../utils/getCardImagePath';
 
 const groupMap = {
   velika: { label: 'Velika Arkana', icon: '/icons/major.png' },
@@ -43,13 +45,13 @@ const TarotMeaning = () => {
       case 'velika':
         return <VelikaArkanaList />;
       case 'stapovi':
-        return <CardGroupList cardKeys={wandKeys} />;
+        return <CardGroupList cardKeys={wandKeys} getImage={getCardImagePath} />;
       case 'pehari':
-        return <CardGroupList cardKeys={cupKeys} />;
+        return <CardGroupList cardKeys={cupKeys} getImage={getCardImagePath} />;
       case 'macevi':
-        return <CardGroupList cardKeys={swordKeys} />;
+        return <CardGroupList cardKeys={swordKeys} getImage={getCardImagePath} />;
       case 'zlatnici':
-        return <CardGroupList cardKeys={pentacleKeys} />;
+        return <CardGroupList cardKeys={pentacleKeys} getImage={getCardImagePath} />;
       default:
         return (
           <p className="text-white text-center mt-10">

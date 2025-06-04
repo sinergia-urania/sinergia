@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TarotCardModal from './TarotCardModal';
+import { getCardImagePath } from '../utils/getCardImagePath';
 
 const VelikaArkanaList = () => {
   const { t } = useTranslation('cardMeanings');
@@ -37,12 +39,7 @@ const VelikaArkanaList = () => {
             className="cursor-pointer hover:scale-105 transition-transform duration-200 text-white text-center"
           >
             <img
-              src={`/cards/${key}.jpg`}
-              onError={(e) => {
-                if (!e.target.src.endsWith('.png')) {
-                  e.target.src = `/cards/${key}.png`;
-                }
-              }}
+              src={getCardImagePath(key)}
               alt={t(`cards.${key}.name`)}
               className="w-full h-auto max-w-[110px] mx-auto mb-1 border border-yellow-400"
             />

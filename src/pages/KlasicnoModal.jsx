@@ -13,23 +13,23 @@ const KlasicnoModal = ({ onClose }) => {
   const handleSelect = (key) => {
     if (key === '2') {
       navigate("/tarot/izbor", {
-        state: { layoutTemplate: DVE_KARTE, tip: "ljubavno" }
+        state: { layoutTemplate: DVE_KARTE, tip: "ljubavno", opisOtvaranja: "Ja – On/Ona" }
       });
     } else if (key === '3') {
       navigate("/tarot/izbor", {
-        state: { layoutTemplate: TRI_KARTE, tip: "tri" }
+        state: { layoutTemplate: TRI_KARTE, tip: "tri", opisOtvaranja: "Prošlost – Sadašnjost – Budućnost" }
       });
     } else if (key === '5') {
       navigate("/tarot/izbor", {
-        state: { layoutTemplate: PET_KARATA, tip: "pet" }
+        state: { layoutTemplate: PET_KARATA, tip: "pet", opisOtvaranja: "Put spoznaje" }
       });
     }
   };
 
   const options = [
-    { key: '2', label: 'Dve karte (Ja/On)', icon: '/icons/love.png' },
-    { key: '3', label: 'Tri karte', icon: '/icons/history.png' },
-    { key: '5', label: 'Pet karata', icon: '/icons/five-cards.png' },
+    { key: '2', label: 'Ja – On/Ona', icon: '/icons/love.png' },
+    { key: '3', label: 'Prošlost – Sadašnjost – Budućnost', icon: '/icons/history.png' },
+    { key: '5', label: 'Put spoznaje', icon: '/icons/five-cards.png' },
   ];
 
   return (
