@@ -67,7 +67,7 @@ const OdgovorAI = () => {
   if ((tip === "ljubavno" && layout.length === 2) || (tip === "tri" && layout.length === 3)) {
     cardSize = { width: 120, height: 198 };
   } else if (tip === "pet" && layout.length === 5) {
-    cardSize = { width: 90, height: 135 };
+    cardSize = { width: 80, height: 145 };
   }
   // END: uvećanje karata po tipu
 
