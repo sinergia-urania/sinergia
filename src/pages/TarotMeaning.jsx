@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import TarotHeader from '../components/TarotHeader';
 import VelikaArkanaList from './VelikaArkanaList';
@@ -13,6 +12,7 @@ const groupMap = {
   zlatnici: { label: 'Zlatnici', icon: '/icons/pentacles.png' },
 };
 
+// START: vraćeni camelCase ključevi jer su sada standard
 const wandKeys = [
   'aceOfWands', 'twoOfWands', 'threeOfWands', 'fourOfWands', 'fiveOfWands',
   'sixOfWands', 'sevenOfWands', 'eightOfWands', 'nineOfWands', 'tenOfWands',
@@ -36,22 +36,29 @@ const pentacleKeys = [
   'sixOfPentacles', 'sevenOfPentacles', 'eightOfPentacles', 'nineOfPentacles', 'tenOfPentacles',
   'pageOfPentacles', 'knightOfPentacles', 'queenOfPentacles', 'kingOfPentacles'
 ];
+// END: vraćeni camelCase ključevi jer su sada standard
 
 const TarotMeaning = () => {
   const [selectedGroup, setSelectedGroup] = useState('velika');
+
+  const generateCardList = (keys) =>
+    keys.map((key) => ({
+      key,
+      name: key, // prikazaće se iz prevoda
+    }));
 
   const renderGroup = () => {
     switch (selectedGroup) {
       case 'velika':
         return <VelikaArkanaList />;
       case 'stapovi':
-        return <CardGroupList cardKeys={wandKeys} getImage={getCardImagePath} />;
+        return <CardGroupList cards={generateCardList(wandKeys)} getCardImagePath={getCardImagePath} />;
       case 'pehari':
-        return <CardGroupList cardKeys={cupKeys} getImage={getCardImagePath} />;
+        return <CardGroupList cards={generateCardList(cupKeys)} getCardImagePath={getCardImagePath} />;
       case 'macevi':
-        return <CardGroupList cardKeys={swordKeys} getImage={getCardImagePath} />;
+        return <CardGroupList cards={generateCardList(swordKeys)} getCardImagePath={getCardImagePath} />;
       case 'zlatnici':
-        return <CardGroupList cardKeys={pentacleKeys} getImage={getCardImagePath} />;
+        return <CardGroupList cards={generateCardList(pentacleKeys)} getCardImagePath={getCardImagePath} />;
       default:
         return (
           <p className="text-white text-center mt-10">

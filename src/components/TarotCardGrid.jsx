@@ -1,63 +1,41 @@
-// TarotCardGrid.jsx
-import React from 'react';
+import React from "react";
+import CardGroupList from "./CardGroupList";
 
-const suitNames = {
-  wands: 'Štapovi',
-  cups: 'Pehari',
-  swords: 'Mačevi',
-  pentacles: 'Zlatnici',
-  major: 'Velika Arkana',
-};
+const TarotCardGrid = () => {
+  const wandCards = [
+    "ace_of_wands", "two_of_wands", "three_of_wands", "four_of_wands",
+    "five_of_wands", "six_of_wands", "seven_of_wands", "eight_of_wands",
+    "nine_of_wands", "ten_of_wands", "page_of_wands", "knight_of_wands",
+    "queen_of_wands", "king_of_wands"
+  ];
 
-const dummyCards = {
-  wands: [
-    { name: 'Ace of Wands', img: '/cards/ace_of_wands.png' },
-    { name: 'Two of Wands', img: '/cards/two_of_wands.png' },
-    { name: 'Three of Wands', img: '/cards/three_of_wands.png' },
-  ],
-  cups: [
-    { name: 'Ace of Cups', img: '/cards/ace_of_cups.png' },
-    { name: 'Two of Cups', img: '/cards/two_of_cups.png' },
-    { name: 'Three of Cups', img: '/cards/three_of_cups.png' },
-  ],
-  swords: [
-    { name: 'Ace of Swords', img: '/cards/ace_of_swords.png' },
-    { name: 'Two of Swords', img: '/cards/two_of_swords.png' },
-    { name: 'Three of Swords', img: '/cards/three_of_swords.png' },
-  ],
-  pentacles: [
-    { name: 'Ace of Pentacles', img: '/cards/ace_of_pentacles.png' },
-    { name: 'Two of Pentacles', img: '/cards/two_of_pentacles.png' },
-    { name: 'Three of Pentacles', img: '/cards/three_of_pentacles.png' },
-  ],
-  major: [
-    { name: 'The Fool', img: '/cards/the_fool.png' },
-    { name: 'The Magician', img: '/cards/the_magician.png' },
-    { name: 'The High Priestess', img: '/cards/the_high_priestess.png' },
-  ],
-};
+  const cupCards = [
+    "ace_of_cups", "two_of_cups", "three_of_cups", "four_of_cups",
+    "five_of_cups", "six_of_cups", "seven_of_cups", "eight_of_cups",
+    "nine_of_cups", "ten_of_cups", "page_of_cups", "knight_of_cups",
+    "queen_of_cups", "king_of_cups"
+  ];
 
-const TarotCardGrid = ({ suit }) => {
-  const cards = dummyCards[suit] || [];
-  const title = suitNames[suit] || '';
+  const swordCards = [
+    "ace_of_swords", "two_of_swords", "three_of_swords", "four_of_swords",
+    "five_of_swords", "six_of_swords", "seven_of_swords", "eight_of_swords",
+    "nine_of_swords", "ten_of_swords", "page_of_swords", "knight_of_swords",
+    "queen_of_swords", "king_of_swords"
+  ];
+
+  const pentacleCards = [
+    "ace_of_pentacles", "two_of_pentacles", "three_of_pentacles", "four_of_pentacles",
+    "five_of_pentacles", "six_of_pentacles", "seven_of_pentacles", "eight_of_pentacles",
+    "nine_of_pentacles", "ten_of_pentacles", "page_of_pentacles", "knight_of_pentacles",
+    "queen_of_pentacles", "king_of_pentacles"
+  ];
 
   return (
-    <div className="w-full px-4">
-      <h2 className="text-center text-xl font-semibold text-white mb-4">{title}</h2>
-      {cards.length === 0 && (
-        <p className="text-red-500 text-center mt-4">⚠️ Nema pronađenih karata za ovu grupu.</p>
-      )}
-      <div className="grid grid-cols-3 gap-4 mt-6 justify-items-center">
-        {cards.map((card, index) => (
-          <div
-            key={index}
-            className="flex flex-col items-center text-white hover:scale-105 transition-transform cursor-pointer"
-          >
-            <img src={card.img} alt={card.name} className="w-14 h-auto rounded shadow" />
-          </div>
-        ))}
-      </div>
-      <p className="text-sm mt-6 text-center text-white">{cards.length} karti učitano</p>
+    <div className="p-4">
+      <CardGroupList cards={wandCards} title="Štapovi" />
+      <CardGroupList cards={cupCards} title="Pehari" />
+      <CardGroupList cards={swordCards} title="Mačevi" />
+      <CardGroupList cards={pentacleCards} title="Pentakli" />
     </div>
   );
 };

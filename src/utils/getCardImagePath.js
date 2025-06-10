@@ -1,4 +1,13 @@
+// START: konverzija camelCase u snake_case za pronalaženje slike
+const toSnakeCase = (str) =>
+  str.replace(/([A-Z])/g, '_$1').toLowerCase();
+// END
 
-// utils/getCardImagePath.js
+const getCardImagePath = (key) => {
+  // START: korišćenje snake_case imena za slike
+  const snakeKey = toSnakeCase(key);
+  return `/cards/${snakeKey}.webp`;
+  // END
+};
 
-export const getCardImagePath = (key) => `/cards/${key}.webp`;
+export { getCardImagePath };

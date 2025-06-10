@@ -11,6 +11,8 @@ const KlasicnoModal = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleSelect = (key) => {
+    new Audio("/hover-click.mp3").play();
+
     if (key === '2') {
       navigate("/tarot/izbor", {
         state: { layoutTemplate: DVE_KARTE, tip: "ljubavno", opisOtvaranja: "Ja – On/Ona" }

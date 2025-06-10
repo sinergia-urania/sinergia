@@ -7,8 +7,13 @@ const TarotCardModal = ({ card, isOpen, onClose }) => {
 
   if (!isOpen || !card) return null;
 
+  const getText = (key) => t(`${card.key}.${key}`) || 'Nije dostupno.';
+
+  const toSnakeCase = (str) => str.replace(/([A-Z])/g, '_$1').toLowerCase();
+  const snakeKey = toSnakeCase(card.key);
+
   return (
-      <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-start overflow-y-auto pt-10 pb-10">
+    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-start overflow-y-auto pt-10 pb-10">
       <div className="bg-gray-900 text-white rounded-lg shadow-lg p-6 w-full max-w-xl relative">
         <button
           onClick={onClose}
@@ -18,24 +23,28 @@ const TarotCardModal = ({ card, isOpen, onClose }) => {
         </button>
 
         <div className="flex flex-col items-center">
+          {/* START: ispravljena snake_case putanja slike */}
           <img
-            src={`/cards/${card.key}.jpg`}
+            src={`/cards/${snakeKey}.webp`}
             onError={(e) => {
               if (!e.target.src.endsWith('.png')) {
-                e.target.src = `/cards/${card.key}.png`;
+                e.target.src = `/cards/${snakeKey}.png`;
               }
             }}
             alt={card.name}
             className="w-32 h-auto mb-4 border border-yellow-500"
           />
-          <h2 className="text-2xl font-bold mb-2">{card.name}</h2>
+          {/* END: ispravljena snake_case putanja slike */}
+
+          <h2 className="text-2xl font-bold mb-4 text-center">{card.name}</h2>
 
           {isPremium ? (
-            <>
-              <p className="mb-2"><strong>Simbolika:</strong> {t(`${card.key}.symbolism`)}</p>
-              <p className="mb-2"><strong>Uspravno značenje:</strong> {t(`${card.key}.uprightExtended`)}</p>
-              <p className="mb-2"><strong>Obrnuto značenje:</strong> {t(`${card.key}.reversedExtended`)}</p>
-            </>
+            <div className="space-y-3 text-sm sm:text-base text-left">
+              <p><strong>Simbolika:</strong> {getText('symbolism')}</p>
+              <p><strong>Uspravno značenje:</strong> {getText('uprightExtended')}</p>
+              <p><strong>Obrnuto značenje:</strong> {getText('reversedExtended')}</p>
+              <p><strong>Značenje kao karta dana:</strong> {getText('daily')}</p>
+            </div>
           ) : (
             <p className="text-yellow-400 text-center mt-4">Ova opcija je dostupna samo za Premium korisnike.</p>
           )}

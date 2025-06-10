@@ -31,7 +31,11 @@ const DaNeOdgovor = () => {
       <TarotHeader />
       <div className="flex flex-col items-center justify-center mt-16">
         <h2 className="text-2xl mb-4">Odgovor na tvoje pitanje:</h2>
-        <img src={karta.slika} alt="Izvučena karta" className="w-48 h-auto mb-6 shadow-lg" />
+        <img
+          src={karta.slika}
+          alt="Izvučena karta"
+          className={`w-48 h-auto mb-6 shadow-lg ${!isUspravna ? "rotate-180" : ""}`}
+        />
         <h3 className={`text-3xl font-bold ${isUspravna ? "text-green-400" : "text-red-500"}`}>
           {isUspravna ? "DA" : "NE"}
         </h3>

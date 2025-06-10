@@ -83,10 +83,21 @@ function Modal({ oblast, onSelect }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} variant="outline" className="text-xl">
+      {/* START: Izmenjeni dugmići za oblast */}
+      <Button
+        onClick={() => {
+          new Audio("/hover-click.mp3").play();
+          setOpen(true);
+        }}
+        variant="outline"
+        className="text-xl !bg-transparent border border-white hover:bg-white/10 text-yellow-400 rounded-lg px-4 py-2"
+      >
         <span className="mr-2">{oblast.ikonica}</span>
         {oblast.naziv}
+        <span className="ml-2">{oblast.ikonica}</span>
       </Button>
+      {/* END: Izmenjeni dugmići za oblast */}
+
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div className="bg-zinc-900 text-white p-6 rounded max-w-md w-full">
@@ -97,6 +108,7 @@ function Modal({ oblast, onSelect }) {
                   key={idx}
                   variant="secondary"
                   onClick={() => {
+                    new Audio("/hover-click.mp3").play();
                     setOpen(false);
                     onSelect(p);
                   }}
@@ -143,11 +155,23 @@ export default function PitanjeIzbor() {
       <div className="max-w-2xl mx-auto px-4 mt-8">
         <h2 className="text-2xl font-bold text-center mb-6">Izaberi oblast pitanja</h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
-          {oblasti.map((oblast) => (
-            <Modal key={oblast.naziv} oblast={oblast} onSelect={(p) => { setPitanje(p); handleNastavi(); }} />
+        {/* START: Oblasti u koloni (filtrirane ako je tip "ja-on-ona") */}
+        <div className="flex flex-col gap-4 mb-10 items-center">
+          {(tip === "ljubavno"
+            ? oblasti.filter((o) => o.naziv === "Ljubav")
+            : oblasti
+          ).map((oblast) => (
+            <Modal
+              key={oblast.naziv}
+              oblast={oblast}
+              onSelect={(p) => {
+                setPitanje(p);
+                handleNastavi();
+              }}
+            />
           ))}
         </div>
+        {/* END: Oblasti u koloni */}
 
         <h2 className="text-lg mb-2">Ili unesi svoje pitanje</h2>
         <div className="mb-10">

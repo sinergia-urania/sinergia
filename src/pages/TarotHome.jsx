@@ -20,14 +20,14 @@ const TarotHome = () => {
             onClick={() => navigate('/tarot/otvaranja')}
             className="flex flex-col items-center transition duration-200"
           >
-            <img src="/icons/history.png" alt="Sva otvaranja" className="w-[90px] h-[100px] mb-2" />
+            <img src="/icons/history.png" alt="Sva otvaranja" className="w-[60px] h-[60px] mb-2" />
             <span className="font-medium text-center">Sva otvaranja</span>
           </button>
 
           {/* Karta dana */}
           <button
             onClick={() =>
-              navigate('/tarot/izbor-karti', { state: { layoutTemplate: JEDNA_KARTA, tip: 'karta-dana' } })
+              navigate('/tarot/izbor-karti', { state: { tip: 'karta-dana' } })
             }
             className="flex flex-col items-center transition duration-200"
           >
@@ -38,7 +38,7 @@ const TarotHome = () => {
           {/* Da / Ne */}
           <button
             onClick={() =>
-              navigate('/tarot/izbor-karti', { state: { layoutTemplate: JEDNA_KARTA, tip: 'da-ne' } })
+              navigate('/tarot/izbor-karti', { state: { tip: 'dane' } })
             }
             className="flex flex-col items-center transition duration-200"
           >

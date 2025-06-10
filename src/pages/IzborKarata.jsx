@@ -14,7 +14,7 @@ const IzborKarata = () => {
   useEffect(() => {
     if (tip) {
       const layout = getLayoutByTip(tip);
-      setLayoutTemplate(layout);
+      setLayoutTemplate(layout.length > 0 ? layout : [{}]);
       console.log("🔁 Generisan layout za tip:", tip, layout);
     }
   }, [tip]);

@@ -9,6 +9,8 @@ const TarotOtvaranja = () => {
   const navigate = useNavigate();
 
   const handleSelect = (key) => {
+    new Audio("/hover-click.mp3").play();
+
     if (key === 'klasicno') {
       setShowModal(true);
     } else if (key === 'keltski') {

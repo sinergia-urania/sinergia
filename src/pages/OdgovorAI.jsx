@@ -62,6 +62,19 @@ const OdgovorAI = () => {
   const kontekstOtvaranja = opisOtvaranja ? `Tip otvaranja: ${opisOtvaranja}. ` : "";
   const layout = getLayoutByTip(tip);
 
+  // START: uvećanje karata po tipu
+  let cardSize = { width: 48, height: 80 };
+  if ((tip === "ljubavno" && layout.length === 2) || (tip === "tri" && layout.length === 3)) {
+    cardSize = { width: 120, height: 198 };
+  } else if (tip === "pet" && layout.length === 5) {
+    cardSize = { width: 90, height: 135 };
+  }
+  // END: uvećanje karata po tipu
+
+  // START: dinamična visina kontejnera
+  const containerHeight = layout.length > 6 ? 600 : 450;
+  // END: dinamična visina kontejnera
+
   return (
     <div className="min-h-screen bg-space text-white p-4 relative">
       <TarotHeader />
@@ -72,7 +85,6 @@ const OdgovorAI = () => {
         <div className="text-xl font-semibold mb-2">Pitanje:</div>
         <div className="mb-4 px-4 text-center max-w-xl">{pitanje || "Nema pitanja."}</div>
 
-        {/* START: Prikaz podpitanja sa validnom map petljom */}
         {podpitanja.length > 0 && (
           <div className="mb-4 w-full max-w-xl">
             {podpitanja.map((p, idx) => (
@@ -85,10 +97,12 @@ const OdgovorAI = () => {
             ))}
           </div>
         )}
-        {/* END: Prikaz podpitanja sa validnom map petljom */}
 
         {/* START: Prikaz placeholdera + slike karte ako postoji */}
-        <div className="relative w-[450px] h-[450px] my-8">
+        <div
+          className="relative w-[450px] mt-1 mb-2"
+          style={{ height: `${containerHeight}px` }}
+        >
           {layout.map((pos, idx) => {
             const card = prikazaneKarte[idx];
             const isRotated = tip === "keltski" && idx === 1;
@@ -96,10 +110,12 @@ const OdgovorAI = () => {
             return (
               <div
                 key={idx}
-                className="absolute w-[48px] h-[72px] bg-yellow-500 text-black text-[10px] flex items-center justify-center rounded shadow text-center overflow-hidden"
+                className="absolute bg-yellow-500 text-black text-[10px] flex items-center justify-center rounded shadow text-center overflow-hidden"
                 style={{
-                  left: `calc(50% + ${pos.x * 48}px - 24px)`,
-                  top: `calc(50% + ${pos.y * 48}px - 36px)`,
+                  width: `${cardSize.width}px`,
+                  height: `${cardSize.height}px`,
+                  left: `calc(50% + ${pos.x * cardSize.width}px - ${cardSize.width / 2}px)`,
+                  top: `calc(50% + ${pos.y * cardSize.height}px - ${cardSize.height / 2}px)`,
                   transform: isRotated ? "rotate(90deg)" : "none",
                   zIndex,
                 }}
@@ -119,7 +135,6 @@ const OdgovorAI = () => {
         </div>
         {/* END: Prikaz placeholdera + slike karte ako postoji */}
 
-        {/* START: AI odgovor sa avatarom */}
         <div className="bg-white bg-opacity-10 p-4 rounded-lg max-w-2xl text-center">
           <div className="flex items-center mb-2">
             <img src={unaAvatar} alt="AI Una" className="w-12 h-12 rounded-full mr-2" />
@@ -166,7 +181,6 @@ const OdgovorAI = () => {
             </div>
           )}
         </div>
-        {/* END: AI odgovor sa avatarom */}
       </div>
     </div>
   );
