@@ -91,8 +91,7 @@ useEffect(() => {
     if (tip === "dane" && selectedCards.length === 1) {
       const karta = selectedCards[0];
       const okrenuta = karta.reversed ? "obrnuto" : "uspravno";
-      console.log("KARTA KEY:", toCamelCase(karta.label));
-console.log("DAILY ZNACENJE:", tExtended(`${toCamelCase(karta.label)}.daily`));
+      
 
       navigate("/tarot/da-ne-odgovor", {
         state: {

@@ -22,9 +22,9 @@ export const TRI_KARTE = {
   label: "Tri karte (prošlost, sadašnjost, budućnost)",
   brojKarata: 3,
   layout: [
-    { x: -1.5, y: 0 },
+    { x: -1, y: 0 },
     { x: 0, y: 0 },
-    { x: 1.5, y: 0 },
+    { x: 1, y: 0 },
   ],
 };
 
