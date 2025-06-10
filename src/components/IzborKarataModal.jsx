@@ -180,10 +180,10 @@ console.log("DAILY ZNACENJE:", tExtended(`${toCamelCase(karta.label)}.daily`));
 
   const centerX = dimensions.width / 2;
   const centerY = (() => {
-    if (numPlaceholders === 1) return dimensions.height * 1.25;
-    if (numPlaceholders === 2) return dimensions.height * 1.25;
-    if (numPlaceholders === 3) return dimensions.height * 1.28;
-    if (numPlaceholders === 5) return dimensions.height * 1.24;
+    if (numPlaceholders === 1) return dimensions.height * 1.20;
+    if (numPlaceholders === 2) return dimensions.height * 1.20;
+    if (numPlaceholders === 3) return dimensions.height * 1.20;
+    if (numPlaceholders === 5) return dimensions.height * 1.20;
     if (numPlaceholders === 10) return dimensions.height * 1.16;
     if (numPlaceholders === 12) return dimensions.height * 1.16;
     return dimensions.height * 0.86;
