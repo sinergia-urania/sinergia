@@ -15,7 +15,7 @@ const totalCards = 78;
 const radius = 600;
 
 const getCardSizeClass = (count) => {
-  if (count === 5) return "w-28 h-44 sm:w-32 sm:h-52";
+  if (count === 5) return "w-24 h-40 sm:w-32 sm:h-52";
   if (count >= 1 && count < 5) return "w-32 h-52 sm:w-36 sm:h-60";
   return "w-[60px] h-[96px] sm:w-[72px] sm:h-[108px]";
 };
