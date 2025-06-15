@@ -1,3 +1,8 @@
+// START: Uvoz MembershipModal modala
+import MembershipModal from './MembershipModal';
+import { useState } from 'react';
+// END: Uvoz MembershipModal modala
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { JEDNA_KARTA } from '../data/layoutTemplates';
@@ -5,6 +10,10 @@ import TarotHeader from '../components/TarotHeader';
 
 const TarotHome = () => {
   const navigate = useNavigate();
+
+  // START: State za modal
+  const [openModal, setOpenModal] = useState(false);
+  // END: State za modal
 
   return (
     <div className="flex flex-col min-h-screen bg-cover bg-center bg-no-repeat text-white"
@@ -55,9 +64,9 @@ const TarotHome = () => {
             <span className="font-medium text-center">Značenje karata</span>
           </button>
 
-          {/* Pristup aplikaciji */}
+          {/* Pristup aplikaciji - otvaranje modala */}
           <button
-            onClick={() => navigate('/tarot/pristup')}
+            onClick={() => setOpenModal(true)}
             className="flex flex-col items-center transition duration-200"
           >
             <img src="/icons/access.png" alt="Pristup aplikaciji" className="w-16 h-16 mb-2" />
@@ -65,6 +74,10 @@ const TarotHome = () => {
           </button>
         </div>
       </div>
+
+      {/* START: Prikaz Membership modala */}
+      {openModal && <MembershipModal onClose={() => setOpenModal(false)} />}
+      {/* END: Prikaz Membership modala */}
     </div>
   );
 };

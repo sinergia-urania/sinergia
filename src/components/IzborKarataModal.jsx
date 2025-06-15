@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { shuffleAndSelect } from "../utils/generateRandomCards";
 import { allCardKeys } from "../utils/allCardKeys";
 import { useTranslation } from "react-i18next";
-import { toCamelCase } from "../utils/toCamelCase";
-
+import { normalizeKey } from "../utils/stringUtils";
 
 
 // START: import funkcije za formatiranje imena
@@ -88,40 +87,42 @@ useEffect(() => {
 
   // START: automatska navigacija na KartaDanaOdgovor
   useEffect(() => {
-    if (tip === "dane" && selectedCards.length === 1) {
-      const karta = selectedCards[0];
-      const okrenuta = karta.reversed ? "obrnuto" : "uspravno";
-      
+  if (tip === "dane" && selectedCards.length === 1) {
+    const karta = selectedCards[0];
+    const okrenuta = karta.reversed ? "obrnuto" : "uspravno";
 
-      navigate("/tarot/da-ne-odgovor", {
-        state: {
-          karta: {
-            naziv: karta.label,
-            slika: `/cards/${toSnakeCase(karta.label)}.webp`,
-            okrenuta,
-          },
+    navigate("/tarot/da-ne-odgovor", {
+      state: {
+        karta: {
+          naziv: karta.label,
+          slika: `/cards/${toSnakeCase(karta.label)}.webp`,
+          okrenuta,
         },
-        replace: true,
-      });
-    }
+      },
+      replace: true,
+    });
+  }
 
-    if (tip === "karta-dana" && selectedCards.length === 1) {
-      const karta = selectedCards[0];
-      navigate("/tarot/karta-dana-odgovor", {
-        state: {
-          karta: {
-            naziv: karta.label,
-            slika: `/cards/${toSnakeCase(karta.label)}.webp`,
-            znacenje: tExtended(`${toCamelCase(karta.label)}.daily`, tExtended(`${toCamelCase(karta.label)}.upright`)),
+  if (tip === "karta-dana" && selectedCards.length === 1) {
+    const karta = selectedCards[0];
+    const key = normalizeKey(karta.label);
+    const znacenje = tExtended(`${key}.daily`, {
+      defaultValue: tExtended(`${key}.upright`, { defaultValue: "" }),
+    });
 
-
-
-          },
+    navigate("/tarot/karta-dana-odgovor", {
+      state: {
+        karta: {
+          naziv: karta.label,
+          slika: `/cards/${toSnakeCase(karta.label)}.webp`,
+          znacenje: znacenje,
         },
-        replace: true,
-      });
-    }
-  }, [selectedCards, tip, navigate, t]);
+      },
+      replace: true,
+    });
+  }
+}, [selectedCards, tip, navigate, tExtended]);
+
   // END: automatska navigacija na KartaDanaOdgovor
 
   const handleCardClick = (cardKey) => {
